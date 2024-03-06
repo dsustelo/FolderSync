@@ -1,15 +1,16 @@
-﻿using System.Runtime.InteropServices;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 
 namespace FolderSync
 {
     class FolderSync
     {
+        private static string logFilePath = "";
         static void Main(string[] args)
         {
             string sourcePath = args[0];
             string replicaPath = args[1];
             int syncInterval = int.Parse(args[2]);
+            FolderSync.logFilePath = args[3];
 
             SynchronizeCallBack(sourcePath, replicaPath);
 
@@ -18,7 +19,7 @@ namespace FolderSync
             executetimer.Elapsed += (sender, e) => SynchronizeCallBack(sourcePath, replicaPath);
             executetimer.Start();
 
-            Console.WriteLine("Pressione Enter at any time to exit.");
+            Console.WriteLine("Press Enter at any time to exit.");
             Console.ReadLine();
         }
 
@@ -34,34 +35,26 @@ namespace FolderSync
         {
             if (!Directory.Exists(sourcePath))
             {
-                Console.WriteLine("Error. Source folder doesn't exist.");
+                LogAndConsole("Error. Source folder doesn't exist.");
                 return false;
             }
 
             if (!Directory.Exists(replicaPath))
             {
-                Console.WriteLine("Replica folder doesn't exist. We will create it for you :)");
+                LogAndConsole("Replica folder doesn't exist. I will create it for you :)");
                 Directory.CreateDirectory(replicaPath);
                 if (!Directory.Exists(replicaPath))
                 {
-                    Console.WriteLine("Error creating replica folder :(, please create it mannualy.");
+                    LogAndConsole("Error creating replica folder :(, please create it mannualy.");
                     return false;
                 }
                 else
                 {
-                    Console.WriteLine("Replica folder created sucessfully!");
+                    LogAndConsole("Replica folder created sucessfully!");
                     return true;
                 }
             }
             return true;
-        }
-
-        static string CalculateMD5(string filePath)
-        {
-            using var md5 = MD5.Create();
-            using var fileStream = File.OpenRead(filePath);
-            byte[] hash = md5.ComputeHash(fileStream);
-            return BitConverter.ToString(hash).Replace("-", "").ToLower();
         }
 
         static void Synchronyze(string sourcePath, string replicaPath)
@@ -80,11 +73,11 @@ namespace FolderSync
                     File.Copy(sourceFile, replicaFile);
                     if (CalculateMD5(sourceFile) == CalculateMD5(replicaFile))
                     {
-                        Console.WriteLine($"File {sourceFileName} copied to replica folder.");
+                        LogAndConsole($"File {sourceFileName} copied to replica folder.");
                     }
                     else
                     {
-                        Console.WriteLine($"Error copying file {sourceFileName} to replica folder.");
+                        LogAndConsole($"Error copying file {sourceFileName} to replica folder.");
                         error = 1;
                     }
                 }
@@ -95,11 +88,11 @@ namespace FolderSync
                         File.Copy(sourceFile, replicaFile, true);
                         if (CalculateMD5(sourceFile) == CalculateMD5(replicaFile))
                         {
-                            Console.WriteLine($"File {sourceFileName} updated in replica folder.");
+                            LogAndConsole($"File {sourceFileName} updated in replica folder.");
                         }
                         else
                         {
-                            Console.WriteLine($"Error updating file {sourceFileName} in replica folder.");
+                            LogAndConsole($"Error updating file {sourceFileName} in replica folder.");
                             error = 1;
                         }
                     }
@@ -116,24 +109,63 @@ namespace FolderSync
                     File.Delete(replicaFile);
                     if (!File.Exists(replicaFile))
                     {
-                        Console.WriteLine($"File {replicaFileName} deleted from replica folder.");
+                        LogAndConsole($"File {replicaFileName} deleted from replica folder.");
                     }
                     else
                     {
-                        Console.WriteLine($"Error deleting file {replicaFileName} from replica folder.");
+                        LogAndConsole($"Error deleting file {replicaFileName} from replica folder.");
                         error = 1;
                     }
                 }
             }
             if (error == 0)
             {
-                Console.WriteLine("Synchronization completed successfully!");
+                LogAndConsole("Synchronization completed successfully!");
             }
             else
             {
-                Console.WriteLine("Synchronization completed with errors!");
+                LogAndConsole("Synchronization completed with errors!");
             }
             return;
+        }
+
+        static string CalculateMD5(string filePath)
+        {
+            using var md5 = MD5.Create();
+            using var fileStream = File.OpenRead(filePath);
+            byte[] hash = md5.ComputeHash(fileStream);
+            return BitConverter.ToString(hash).Replace("-", "").ToLower();
+        }
+
+        private static void LogAndConsole(string message)
+        {
+            string msg = $"{DateTime.Now}" + " - " + message;
+
+            Console.WriteLine(msg);
+
+            string logPath = Path.GetDirectoryName(FolderSync.logFilePath);
+
+            if (!Directory.Exists(logPath))
+            {
+                Console.WriteLine("Logs folder doesn't exist. I will create it for you :)");
+                Directory.CreateDirectory(logPath);
+
+                if (!Directory.Exists(logPath))
+                {
+                    Console.WriteLine("Error creating log folder :(, please create it mannualy.");
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("Replica folder created sucessfully!");
+                }
+            }
+
+            using (StreamWriter writer = new StreamWriter(FolderSync.logFilePath, true))
+            {
+                writer.WriteLine(msg);
+            }
+
         }
     }
 }
