@@ -287,8 +287,8 @@ namespace FolderSynchronizerProgram
 
             try
             {
-                using var md5 = MD5.Create();
-                using var fileStream = File.OpenRead(filePath);
+                using MD5 md5 = MD5.Create();
+                using FileStream fileStream = File.OpenRead(filePath);
                 byte[] hash = md5.ComputeHash(fileStream);
                 return BitConverter.ToString(hash).Replace("-", "").ToLower();
             }
