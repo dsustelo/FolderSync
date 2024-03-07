@@ -114,10 +114,10 @@ namespace FolderSynchronizerProgram
                             error = 1;
                         }
                     }
-                }
-                else
-                {
-                    log.LogAndConsole($"File {sourceFileName} already exists in replica folder and is up to date.");
+                    else
+                    {
+                        log.LogAndConsole($"File {sourceFileName} already exists in replica folder and is up to date.");
+                    }
                 }
             }
             return;
@@ -218,7 +218,6 @@ namespace FolderSynchronizerProgram
                     if (Directory.Exists(replicaPathSubDir))
                     {
                         log.LogAndConsole($"Directory {relativeSourcePathSubDir} created in replica folder.");
-                        // Call the method to synchronize the directories, preventing the error of the pattern directorys not found
                         SynchronizeDirectories(error, sourcePath, replicaPath);
                         return;
                     }
@@ -268,7 +267,6 @@ namespace FolderSynchronizerProgram
                     if (!Directory.Exists(replicaDirectoriePath))
                     {
                         log.LogAndConsole($"Directory {relativeReplicaPathSubDir} deleted from replica folder.");
-                        // Call the method to synchronize the directories, preventing the error of the child directorys not found
                         SynchronizeDirectories(error, sourcePath, replicaPath);
                         return;
                     }

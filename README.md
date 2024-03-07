@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Folder Synchronizer is a simple command-line tool designed to synchronize directories between a source and a replica. It ensures that files and subdirectories are kept up-to-date across both locations.
+The Folder Synchronizer is a simple command-line tool designed to synchronize directories from a source to a replica. It ensures that files and subdirectories are kept up-to-date in replica location.
 
 ## Usage
 
