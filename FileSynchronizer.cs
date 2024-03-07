@@ -115,6 +115,10 @@ namespace FolderSynchronizerProgram
                         }
                     }
                 }
+                else
+                {
+                    log.LogAndConsole($"File {sourceFileName} already exists in replica folder and is up to date.");
+                }
             }
             return;
         }

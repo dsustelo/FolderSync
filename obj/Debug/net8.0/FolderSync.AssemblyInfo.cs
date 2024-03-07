@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FolderSync")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+244f202a3665ef737484e53dee04ad2fcddb3346")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6ab0ecabb569fbc83f3e869f11d638e1473d2348")]
 [assembly: System.Reflection.AssemblyProductAttribute("FolderSync")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FolderSync")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
