@@ -12,7 +12,7 @@ namespace FolderSynchronizerProgram
         }
         public Logger(string logFilePath)
         {
-            _logFilePath = logFilePath;
+            string _logFilePath = logFilePath;
         }
 
         // Method to log messages to a file and to the console
